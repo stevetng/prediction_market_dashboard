@@ -33,9 +33,9 @@ export function InstitutionalView() {
   // Account for padding (32px on each side = 64px total)
   const availableWidth = isClient ? viewportWidth - 64 : 1336
   
-  const chartWidth = isClient ? Math.floor(availableWidth * 0.7) : 980
-  const metricsWidth = isClient ? availableWidth - chartWidth - 16 : 340 // Fill remaining space
-  const metricsX = isClient ? chartWidth + 16 : 996
+  const chartWidth = isClient ? Math.floor(availableWidth * 0.6) : 800 // Reduced from 70% to 60%
+  const metricsWidth = isClient ? availableWidth - chartWidth - 16 : 520 // Fill remaining space
+  const metricsX = isClient ? chartWidth + 16 : 816
   
   const bottomWidth = isClient ? Math.floor((availableWidth - 16) * 0.5) : 640
   const bottomRightX = isClient ? bottomWidth + 16 : 660
@@ -46,7 +46,7 @@ export function InstitutionalView() {
       <DraggableWidget
         widgetId="portfolio-chart"
         viewId="institutional"
-        defaultWidth={980}
+        defaultWidth={800}
         defaultHeight={400}
         initialX={0}
         initialY={0}
@@ -60,9 +60,9 @@ export function InstitutionalView() {
       <DraggableWidget
         widgetId="positions-table"
         viewId="institutional"
-        defaultWidth={340}
+        defaultWidth={520}
         defaultHeight={400}
-        initialX={996}
+        initialX={816}
         initialY={0}
         responsiveWidth={isClient ? metricsWidth : undefined}
         responsiveX={isClient ? metricsX : undefined}

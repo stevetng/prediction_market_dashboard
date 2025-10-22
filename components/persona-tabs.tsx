@@ -12,9 +12,9 @@ interface PersonaTabsProps {
 export function PersonaTabs({ activePersona, onPersonaChange }: PersonaTabsProps) {
   const personas: { value: PersonaView; label: string }[] = [
     { value: "institutional", label: "Portfolio Overview" },
+    { value: "forecaster", label: "Performance Analytics" },
     { value: "market-investigation", label: "Market Deep Dive" },
     { value: "risk", label: "Risk Management" },
-    { value: "forecaster", label: "Performance Analytics" },
   ]
 
   return (
