@@ -59,7 +59,7 @@ export function RiskHeatmap() {
                   }}
                 />
                 <div className="absolute inset-0 flex items-center px-3">
-                  <span className="text-xs font-medium" style={{ color: metric.color }}>
+                  <span className="text-xs font-medium text-black">
                     {metric.percentage}% exposure
                   </span>
                 </div>

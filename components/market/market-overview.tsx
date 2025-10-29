@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
 import { formatCurrency } from "@/lib/utils"
 import { Calendar, TrendingUp, Clock } from "lucide-react"
+import { useMarketContext } from "@/lib/market-context"
 
 interface MarketData {
   timestamp: number
@@ -28,6 +29,7 @@ interface MarketOverview {
 }
 
 export function MarketOverview() {
+  const { selectedMarket } = useMarketContext()
   const [isClient, setIsClient] = useState(false)
   const [marketData, setMarketData] = useState<MarketOverview | null>(null)
 
@@ -69,11 +71,11 @@ export function MarketOverview() {
       const currentData = priceData[priceData.length - 1]
       
       return {
-        title: "Will Trump win the 2024 Presidential Election?",
-        description: "This market will resolve to 'Yes' if Donald Trump wins the 2024 U.S. Presidential Election and becomes the 47th President of the United States.",
+        title: selectedMarket.title,
+        description: selectedMarket.description,
         resolutionDate,
         daysRemaining: Math.max(0, daysRemaining),
-        totalVolume: 353014,
+        totalVolume: selectedMarket.volume,
         roi: 1.42,
         probabilities: {
           main: { 
@@ -104,7 +106,7 @@ export function MarketOverview() {
     }, 30000)
     
     return () => clearInterval(interval)
-  }, [])
+  }, [selectedMarket])
 
   if (!isClient || !marketData) {
     return (
@@ -134,8 +136,8 @@ export function MarketOverview() {
     <div className="rounded-lg border border-border bg-card p-4 h-full flex flex-col">
       {/* Header with market image placeholder and title */}
       <div className="flex items-start gap-4 mb-4">
-        <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-700 rounded-lg flex items-center justify-center flex-shrink-0">
-          <span className="text-white font-bold text-xl">DT</span>
+        <div className={`w-16 h-16 bg-gradient-to-br ${selectedMarket.iconColor} rounded-lg flex items-center justify-center flex-shrink-0`}>
+          <span className="text-white font-bold text-xl">{selectedMarket.icon}</span>
         </div>
         <div className="flex-1 min-w-0">
           <h2 className="text-lg font-bold leading-tight mb-2">{marketData.title}</h2>
@@ -197,8 +199,8 @@ export function MarketOverview() {
       </div>
 
       {/* Price Chart */}
-      <div className="flex-1 min-h-[200px] mb-4">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex-1 min-h-[200px] min-w-[300px] mb-4">
+        <ResponsiveContainer width="100%" height="100%" minHeight={200} minWidth={300}>
           <LineChart data={marketData.priceData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <XAxis
               dataKey="timestamp"

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { formatCurrency } from "@/lib/utils"
 import { BookOpen, TrendingUp, TrendingDown } from "lucide-react"
+import { useMarketContext } from "@/lib/market-context"
 
 interface OrderBookEntry {
   price: number
@@ -18,9 +19,9 @@ interface OrderBookData {
 }
 
 export function OrderbookVisualization() {
+  const { selectedMarket } = useMarketContext()
   const [isClient, setIsClient] = useState(false)
   const [orderBook, setOrderBook] = useState<OrderBookData | null>(null)
-  const [selectedMarket, setSelectedMarket] = useState("Will Trump win 2024?")
 
   useEffect(() => {
     setIsClient(true)
@@ -75,7 +76,7 @@ export function OrderbookVisualization() {
     }, 2000)
     
     return () => clearInterval(interval)
-  }, [])
+  }, [selectedMarket])
 
   if (!isClient || !orderBook) {
     return (
@@ -100,7 +101,7 @@ export function OrderbookVisualization() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-sm font-semibold mb-1">Order Book</h3>
-          <p className="text-xs text-muted-foreground">{selectedMarket}</p>
+          <p className="text-xs text-muted-foreground">{selectedMarket.title}</p>
         </div>
         <BookOpen className="h-4 w-4 text-muted-foreground" />
       </div>

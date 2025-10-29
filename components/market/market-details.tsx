@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { formatCurrency, cn } from "@/lib/utils"
 import { Info, Calendar, Users, DollarSign, Clock, Target } from "lucide-react"
+import { useMarketContext } from "@/lib/market-context"
 
 interface MarketInfo {
   title: string
@@ -21,6 +22,7 @@ interface MarketInfo {
 }
 
 export function MarketDetails() {
+  const { selectedMarket } = useMarketContext()
   const [isClient, setIsClient] = useState(false)
   const [marketInfo, setMarketInfo] = useState<MarketInfo | null>(null)
 
@@ -33,24 +35,24 @@ export function MarketDetails() {
       const resolutionDate = new Date(now + Math.random() * 60 * 24 * 60 * 60 * 1000) // Up to 60 days from now
       
       return {
-        title: "Will Trump win the 2024 Presidential Election?",
-        description: "This market will resolve to 'Yes' if Donald Trump wins the 2024 U.S. Presidential Election and becomes the 47th President of the United States. The market will resolve based on the official results certified by the Electoral College.",
-        category: "Politics",
+        title: selectedMarket.title,
+        description: selectedMarket.description,
+        category: selectedMarket.category,
         createdDate,
         resolutionDate,
-        totalVolume: Math.floor(Math.random() * 5000000) + 1000000, // $1M - $6M
+        totalVolume: selectedMarket.volume,
         totalTrades: Math.floor(Math.random() * 50000) + 10000, // 10k - 60k trades
-        uniqueTraders: Math.floor(Math.random() * 5000) + 1000, // 1k - 6k traders
+        uniqueTraders: selectedMarket.traders,
         openInterest: Math.floor(Math.random() * 2000000) + 500000, // $500k - $2.5M
         liquidity: Math.random() * 0.3 + 0.7, // 70% - 100%
         status: "active",
-        resolutionCriteria: "Market resolves to 'Yes' if Donald Trump is certified as the winner of the 2024 U.S. Presidential Election by the Electoral College. Market resolves to 'No' if any other candidate wins.",
-        tags: ["Politics", "Presidential Election", "2024", "Trump", "High Volume"]
+        resolutionCriteria: `Market resolves based on the official outcome of ${selectedMarket.title}`,
+        tags: [selectedMarket.category, "High Volume", "Active Trading"]
       }
     }
 
     setMarketInfo(generateMarketInfo())
-  }, [])
+  }, [selectedMarket])
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { formatCurrency } from "@/lib/utils"
 import { Activity, Clock } from "lucide-react"
+import { useMarketContext } from "@/lib/market-context"
 
 interface Trade {
   id: string
@@ -14,6 +15,7 @@ interface Trade {
 }
 
 export function RecentTrades() {
+  const { selectedMarket } = useMarketContext()
   const [isClient, setIsClient] = useState(false)
   const [trades, setTrades] = useState<Trade[]>([])
 
@@ -51,7 +53,7 @@ export function RecentTrades() {
     }, 3000 + Math.random() * 5000)
     
     return () => clearInterval(interval)
-  }, [])
+  }, [selectedMarket])
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', { 
@@ -95,7 +97,7 @@ export function RecentTrades() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-sm font-semibold mb-1">Recent Trades</h3>
-          <p className="text-xs text-muted-foreground font-medium">Will Trump win the 2024 Presidential Election?</p>
+          <p className="text-xs text-muted-foreground font-medium">{selectedMarket.title}</p>
           <p className="text-xs text-muted-foreground">Live trading activity</p>
         </div>
         <Activity className="h-4 w-4 text-muted-foreground" />

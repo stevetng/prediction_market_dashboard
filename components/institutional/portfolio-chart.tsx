@@ -219,8 +219,8 @@ export function PortfolioChart() {
           ))}
         </div>
       </div>
-      <div className="flex-1 min-h-[200px]">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex-1 min-h-[200px] min-w-[300px]">
+        <ResponsiveContainer width="100%" height="100%" minHeight={200} minWidth={300}>
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <XAxis
               dataKey="timestamp"
@@ -245,6 +245,15 @@ export function PortfolioChart() {
                 boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
               }}
               formatter={(value: any) => [`$${Number(value).toLocaleString()}`, "Portfolio Value"]}
+              labelFormatter={(timestamp) => {
+                const date = new Date(timestamp)
+                return date.toLocaleDateString('en-US', { 
+                  month: 'short', 
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })
+              }}
             />
             <Line
               type="monotone"

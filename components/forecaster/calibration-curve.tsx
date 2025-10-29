@@ -37,8 +37,8 @@ export function CalibrationCurve() {
         </div>
         <TrendingUp className="h-4 w-4 text-muted-foreground" />
       </div>
-      <div className="h-[250px]">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="h-[250px] min-w-[250px]">
+        <ResponsiveContainer width="100%" height="100%" minHeight={250} minWidth={250}>
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 20 }}>
             <XAxis
               dataKey="predicted"
@@ -67,21 +67,27 @@ export function CalibrationCurve() {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
+                backgroundColor: "hsl(var(--card))",
+                border: "1px solid hsl(var(--border))",
                 borderRadius: "8px",
                 boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                color: "hsl(var(--foreground))"
               }}
-              formatter={(value: any, name: any, props: any) => {
-                const data = props.payload
-                return [
-                  <div key="content" className="space-y-1">
-                    <div>Predicted: {data.predicted}%</div>
-                    <div>Actual: {data.actual?.toFixed(1)}%</div>
-                    {data.count && <div>Samples: {data.count}</div>}
-                  </div>,
-                  "",
-                ]
+              content={({ active, payload }) => {
+                if (!active || !payload || payload.length === 0) return null
+                const data = payload[0]?.payload
+                if (!data) return null
+                
+                return (
+                  <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+                    <div className="space-y-1 text-sm">
+                      <div className="font-medium">Calibration Point</div>
+                      <div>Predicted: {data.predicted}%</div>
+                      <div>Actual: {data.actual?.toFixed(1)}%</div>
+                      {data.count && <div>Samples: {data.count}</div>}
+                    </div>
+                  </div>
+                )
               }}
             />
             <Line

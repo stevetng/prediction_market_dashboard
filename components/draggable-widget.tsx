@@ -105,6 +105,7 @@ export function DraggableWidget({
     }
   }, [responsiveX])
 
+
   const handleDragStart = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement
     const rect = widgetRef.current?.getBoundingClientRect()
@@ -229,6 +230,33 @@ export function DraggableWidget({
       onMouseDown={handleDragStart}
     >
       <div className="h-full overflow-auto">{children}</div>
+
+      {/* Visual Indicators */}
+      {/* Drag indicator at top center */}
+      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 flex items-center gap-1 opacity-30 hover:opacity-60 transition-opacity cursor-grab hover:cursor-grab">
+        <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+        <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+        <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+        <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+        <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+        <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+      </div>
+
+      {/* Resize indicator at bottom right */}
+      <div className="absolute bottom-2 right-2 opacity-30 hover:opacity-60 transition-opacity cursor-nw-resize hover:cursor-nw-resize">
+        <svg width="12" height="12" viewBox="0 0 12 12" className="text-muted-foreground">
+          <path
+            d="M12 0L12 12L0 12L12 0Z"
+            fill="currentColor"
+            opacity="0.3"
+          />
+          <circle cx="8" cy="4" r="0.5" fill="currentColor" />
+          <circle cx="10" cy="6" r="0.5" fill="currentColor" />
+          <circle cx="6" cy="6" r="0.5" fill="currentColor" />
+          <circle cx="8" cy="8" r="0.5" fill="currentColor" />
+          <circle cx="10" cy="10" r="0.5" fill="currentColor" />
+        </svg>
+      </div>
 
       {/* Resize handles */}
       <div

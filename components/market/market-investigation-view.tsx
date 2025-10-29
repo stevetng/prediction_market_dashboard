@@ -5,7 +5,9 @@ import { OrderbookVisualization } from "./orderbook-visualization"
 import { RecentTrades } from "./recent-trades"
 import { MarketOverview } from "./market-overview"
 import { MarketDetails } from "./market-details"
+import { MarketSelector } from "./market-selector"
 import { DraggableWidget } from "../draggable-widget"
+import { MarketProvider } from "@/lib/market-context"
 
 export function MarketInvestigationView() {
   const [isClient, setIsClient] = useState(false)
@@ -36,7 +38,13 @@ export function MarketInvestigationView() {
   const rightColumnX = isClient ? widgetWidth + 16 : 660 // Match other tabs
 
   return (
-    <div className="relative min-h-[800px]">
+    <MarketProvider>
+      {/* Market Selector - Outside widgets container */}
+      <div className="mb-6 flex justify-center relative z-50">
+        <MarketSelector />
+      </div>
+      
+      <div className="relative min-h-[800px]">
       {/* Market Overview - Top Left */}
       <DraggableWidget
         defaultWidth={640}
@@ -90,6 +98,7 @@ export function MarketInvestigationView() {
       >
         <MarketDetails />
       </DraggableWidget>
-    </div>
+      </div>
+    </MarketProvider>
   )
 }

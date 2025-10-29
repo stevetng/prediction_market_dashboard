@@ -14,7 +14,7 @@ export function TrendingMarketsTicker() {
 
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 bg-card border-t border-border overflow-hidden z-50"
+      className="w-full bg-card border-b border-border overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >

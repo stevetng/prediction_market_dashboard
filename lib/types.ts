@@ -67,4 +67,4 @@ export interface CategoryPerformance {
   pnl: number
 }
 
-export type PersonaView = "institutional" | "risk" | "forecaster" | "market-investigation"
+export type PersonaView = "example" | "institutional" | "risk" | "forecaster" | "market-investigation"

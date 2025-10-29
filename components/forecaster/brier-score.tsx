@@ -59,8 +59,8 @@ export function BrierScore() {
           <div className="text-2xl font-bold">{avgScore.toFixed(3)}</div>
         </div>
       </div>
-      <div className="flex-1 min-h-[150px]">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex-1 min-h-[150px] min-w-[250px]">
+        <ResponsiveContainer width="100%" height="100%" minHeight={150} minWidth={250}>
           <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <XAxis
               dataKey="timestamp"
@@ -78,12 +78,21 @@ export function BrierScore() {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
+                backgroundColor: "hsl(var(--card))",
+                border: "1px solid hsl(var(--border))",
                 borderRadius: "8px",
                 boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                color: "hsl(var(--foreground))"
               }}
               formatter={(value: any) => [(value as number).toFixed(3), "Brier Score"]}
+              labelFormatter={(timestamp) => {
+                const date = new Date(timestamp)
+                return date.toLocaleDateString('en-US', { 
+                  month: 'short', 
+                  day: 'numeric',
+                  year: 'numeric'
+                })
+              }}
             />
             <Line
               type="monotone"
