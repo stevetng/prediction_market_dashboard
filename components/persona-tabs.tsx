@@ -18,9 +18,9 @@ export function PersonaTabs({ activePersona, onPersonaChange }: PersonaTabsProps
 
   const personas: { value: PersonaView; label: string }[] = [
     { value: "example", label: "Example Tab" },
-    { value: "institutional", label: "Portfolio Overview" },
-    { value: "forecaster", label: "Performance Analytics" },
     { value: "market-investigation", label: "Market Deep Dive" },
+    { value: "forecaster", label: "Performance Analytics" },
+    { value: "institutional", label: "Portfolio Overview" },
     { value: "risk", label: "Risk Management" },
   ]
 

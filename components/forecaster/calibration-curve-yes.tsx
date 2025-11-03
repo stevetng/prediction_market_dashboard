@@ -1,44 +1,68 @@
 "use client"
 
-import { useMemo } from "react"
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
-import { generateCalibrationData } from "@/lib/mock-data"
+import { useState, useEffect } from "react"
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
 import { TrendingUp } from "lucide-react"
 
-export function CalibrationCurve() {
-  const data = useMemo(() => {
-    return generateCalibrationData()
+interface CalibrationData {
+  predicted: number
+  actual: number
+  count: number
+}
+
+export function CalibrationCurveYes() {
+  const [isClient, setIsClient] = useState(false)
+  const [chartData, setChartData] = useState<CalibrationData[]>([])
+
+  useEffect(() => {
+    setIsClient(true)
+    
+    // Generate calibration data for YES bets
+    const data: CalibrationData[] = []
+    for (let predicted = 10; predicted <= 90; predicted += 10) {
+      // YES bets tend to be slightly overconfident at higher probabilities
+      const variance = Math.random() * 8 - 4 // ±4% variance
+      const overconfidenceBias = predicted > 60 ? (predicted - 60) * 0.1 : 0 // Slight overconfidence bias
+      const actual = Math.max(0, Math.min(100, predicted + variance - overconfidenceBias))
+      
+      data.push({
+        predicted,
+        actual,
+        count: Math.floor(Math.random() * 50) + 20 // 20-70 samples
+      })
+    }
+    
+    setChartData(data)
   }, [])
 
-  const chartData = useMemo(() => {
-    return data.map((d) => ({
-      predicted: d.predicted,
-      actual: d.actual,
-      perfect: d.predicted,
-      count: d.count,
-    }))
-  }, [data])
-
-  if (chartData.length === 0) {
+  if (!isClient || chartData.length === 0) {
     return (
-      <div className="rounded-lg border border-border bg-card p-4">
-        <h3 className="text-sm font-semibold mb-4">Calibration Curve</h3>
-        <div className="h-[250px] flex items-center justify-center text-muted-foreground">No data available</div>
+      <div className="rounded-lg border border-border bg-card p-4 h-full flex flex-col">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="text-sm font-semibold mb-1">Calibration Curve - YES Bets</h3>
+            <p className="text-xs text-muted-foreground">Predicted vs. Actual Outcomes</p>
+          </div>
+          <TrendingUp className="h-4 w-4 text-muted-foreground" />
+        </div>
+        <div className="flex-1 flex items-center justify-center text-muted-foreground">
+          Loading...
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <div className="rounded-lg border border-border bg-card p-4 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-sm font-semibold mb-1">Calibration Curve</h3>
+          <h3 className="text-sm font-semibold mb-1">Calibration Curve - YES Bets</h3>
           <p className="text-xs text-muted-foreground">Predicted vs. Actual Outcomes</p>
         </div>
-        <TrendingUp className="h-4 w-4 text-muted-foreground" />
+        <TrendingUp className="h-4 w-4 text-green-600" />
       </div>
-      <div className="h-[250px] min-w-[250px]">
-        <ResponsiveContainer width="100%" height="100%" minHeight={250} minWidth={250}>
+      <div className="h-[200px] min-w-[250px]">
+        <ResponsiveContainer width="100%" height="100%" minHeight={200} minWidth={250}>
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 20 }}>
             <XAxis
               dataKey="predicted"
@@ -82,8 +106,8 @@ export function CalibrationCurve() {
                 
                 return (
                   <div className="bg-white border-2 border-gray-200 rounded-lg p-3 shadow-lg">
-                    <div className="space-y-1 text-sm text-gray-900">
-                      <div className="font-medium">Calibration Point</div>
+                    <div className="space-y-1 text-sm">
+                      <div className="font-medium text-green-700">YES Bet Calibration</div>
                       <div>Predicted: {data.predicted}%</div>
                       <div>Actual: {data.actual?.toFixed(1)}%</div>
                       {data.count && <div>Samples: {data.count}</div>}
@@ -92,36 +116,28 @@ export function CalibrationCurve() {
                 )
               }}
             />
+            {/* Perfect calibration line */}
             <Line
               type="linear"
-              dataKey="perfect"
-              stroke="#9ca3af"
+              dataKey="predicted"
+              stroke="#d1d5db"
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={false}
               name="Perfect Calibration"
             />
+            {/* Actual calibration line */}
             <Line
               type="monotone"
               dataKey="actual"
-              stroke="#3b82f6"
+              stroke="#10b981"
               strokeWidth={3}
-              dot={{ fill: "#3b82f6", strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, fill: "#3b82f6", stroke: "#3b82f6", strokeWidth: 2 }}
-              name="Your Calibration"
+              dot={{ fill: "#10b981", strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, stroke: "#10b981", strokeWidth: 2 }}
+              name="YES Bets"
             />
           </LineChart>
         </ResponsiveContainer>
-      </div>
-      <div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-border">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-0.5 bg-muted" style={{ borderTop: "1px dashed #64748b" }} />
-          <span className="text-xs text-muted-foreground">Perfect Calibration</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-0.5 bg-primary" />
-          <span className="text-xs text-muted-foreground">Your Calibration</span>
-        </div>
       </div>
     </div>
   )

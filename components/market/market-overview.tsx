@@ -38,33 +38,120 @@ export function MarketOverview() {
     
     const generateMarketData = (): MarketOverview => {
       const now = Date.now()
-      const resolutionDate = new Date("2024-11-05T23:59:59.000Z")
-      const daysRemaining = Math.ceil((resolutionDate.getTime() - now) / (1000 * 60 * 60 * 24))
+      
+      // Market-specific configuration based on selected market
+      const getMarketConfig = () => {
+        const marketTitle = selectedMarket.title.toLowerCase()
+        
+        if (marketTitle.includes('trump') || marketTitle.includes('election') || marketTitle.includes('president')) {
+          return {
+            resolutionDate: new Date("2024-11-05T23:59:59.000Z"),
+            startProb: 58 + Math.random() * 8, // 58-66%
+            startSecondary: 42 + Math.random() * 8, // 42-50%
+            startTertiary: 35 + Math.random() * 8, // 35-43%
+            labels: {
+              main: "Trump Win Probability",
+              secondary: "Electoral College Margin", 
+              tertiary: "Popular Vote Margin"
+            },
+            trend: 'volatile' // More volatile for political markets
+          }
+        } else if (marketTitle.includes('fed') || marketTitle.includes('rate') || marketTitle.includes('interest')) {
+          return {
+            resolutionDate: new Date("2024-12-18T23:59:59.000Z"),
+            startProb: 72 + Math.random() * 6, // 72-78%
+            startSecondary: 25 + Math.random() * 10, // 25-35%
+            startTertiary: 15 + Math.random() * 10, // 15-25%
+            labels: {
+              main: "Rate Cut Probability",
+              secondary: "50bps Cut Chance",
+              tertiary: "75bps Cut Chance"
+            },
+            trend: 'stable' // More stable for economic indicators
+          }
+        } else if (marketTitle.includes('inflation') || marketTitle.includes('cpi')) {
+          return {
+            resolutionDate: new Date("2024-12-11T23:59:59.000Z"),
+            startProb: 45 + Math.random() * 10, // 45-55%
+            startSecondary: 65 + Math.random() * 8, // 65-73%
+            startTertiary: 28 + Math.random() * 12, // 28-40%
+            labels: {
+              main: "Above Target Probability",
+              secondary: "Core CPI > 3.2%",
+              tertiary: "Headline CPI > 2.8%"
+            },
+            trend: 'trending' // Gradual trends for inflation
+          }
+        } else {
+          // Default configuration for other markets
+          return {
+            resolutionDate: new Date(now + (Math.random() * 90 + 30) * 24 * 60 * 60 * 1000), // 30-120 days
+            startProb: 50 + Math.random() * 20, // 50-70%
+            startSecondary: 40 + Math.random() * 20, // 40-60%
+            startTertiary: 30 + Math.random() * 20, // 30-50%
+            labels: {
+              main: "Primary Outcome",
+              secondary: "Secondary Factor",
+              tertiary: "Tertiary Factor"
+            },
+            trend: 'moderate'
+          }
+        }
+      }
+      
+      const config = getMarketConfig()
+      const daysRemaining = Math.ceil((config.resolutionDate.getTime() - now) / (1000 * 60 * 60 * 24))
       
       // Generate price data for the last 30 days
       const priceData: MarketData[] = []
-      let probability = 55 + Math.random() * 10 // Start around 55-65%
-      let tariffInflation = 40 + Math.random() * 10 // Start around 40-50%
-      let quantitativeTightening = 35 + Math.random() * 10 // Start around 35-45%
+      let probability = config.startProb
+      let secondary = config.startSecondary
+      let tertiary = config.startTertiary
       
       for (let i = 30; i >= 0; i--) {
         const timestamp = now - (i * 24 * 60 * 60 * 1000)
         
-        // Add some realistic price movement
-        probability += (Math.random() - 0.5) * 4
-        tariffInflation += (Math.random() - 0.5) * 3
-        quantitativeTightening += (Math.random() - 0.5) * 3
+        // Apply market-specific movement patterns
+        let probChange, secChange, tertChange
+        
+        switch (config.trend) {
+          case 'volatile':
+            probChange = (Math.random() - 0.5) * 6 // ±3%
+            secChange = (Math.random() - 0.5) * 5 // ±2.5%
+            tertChange = (Math.random() - 0.5) * 4 // ±2%
+            break
+          case 'stable':
+            probChange = (Math.random() - 0.5) * 2 // ±1%
+            secChange = (Math.random() - 0.5) * 2 // ±1%
+            tertChange = (Math.random() - 0.5) * 2 // ±1%
+            break
+          case 'trending':
+            // Add slight upward/downward bias
+            const bias = i > 15 ? 0.2 : -0.2 // Trend change mid-period
+            probChange = (Math.random() - 0.5) * 3 + bias
+            secChange = (Math.random() - 0.5) * 3 + bias * 0.8
+            tertChange = (Math.random() - 0.5) * 3 + bias * 0.6
+            break
+          default:
+            probChange = (Math.random() - 0.5) * 4
+            secChange = (Math.random() - 0.5) * 3
+            tertChange = (Math.random() - 0.5) * 3
+        }
+        
+        probability += probChange
+        secondary += secChange
+        tertiary += tertChange
         
         // Keep within reasonable bounds
-        probability = Math.max(20, Math.min(80, probability))
-        tariffInflation = Math.max(20, Math.min(70, tariffInflation))
-        quantitativeTightening = Math.max(20, Math.min(70, quantitativeTightening))
+        probability = Math.max(15, Math.min(85, probability))
+        secondary = Math.max(10, Math.min(80, secondary))
+        tertiary = Math.max(5, Math.min(75, tertiary))
         
         priceData.push({
           timestamp,
           probability,
-          tariffInflation,
-          quantitativeTightening
+          tariffInflation: secondary,
+          quantitativeTightening: tertiary
         })
       }
       
@@ -73,23 +160,23 @@ export function MarketOverview() {
       return {
         title: selectedMarket.title,
         description: selectedMarket.description,
-        resolutionDate,
+        resolutionDate: config.resolutionDate,
         daysRemaining: Math.max(0, daysRemaining),
         totalVolume: selectedMarket.volume,
-        roi: 1.42,
+        roi: 0.8 + Math.random() * 1.2, // Random ROI between 0.8 and 2.0
         probabilities: {
           main: { 
-            label: "Probability", 
+            label: config.labels.main, 
             value: Math.round(currentData.probability), 
             color: "#10b981" 
           },
           secondary: { 
-            label: "Tariff Inflation", 
+            label: config.labels.secondary, 
             value: Math.round(currentData.tariffInflation), 
             color: "#3b82f6" 
           },
           tertiary: { 
-            label: "QT / Quantitative Tightening", 
+            label: config.labels.tertiary, 
             value: Math.round(currentData.quantitativeTightening), 
             color: "#1f2937" 
           }
@@ -222,15 +309,18 @@ export function MarketOverview() {
             <Tooltip
               contentStyle={{
                 backgroundColor: "white",
-                border: "1px solid #e5e7eb",
+                border: "2px solid #e5e7eb",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                fontSize: "12px"
+                boxShadow: "0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05)",
+                fontSize: "12px",
+                color: "#111827",
+                zIndex: 1000
               }}
+              wrapperStyle={{ zIndex: 1000 }}
               formatter={(value: any, name: any) => {
-                if (name === "probability") return [`${Math.round(value)}%`, "Probability"]
-                if (name === "tariffInflation") return [`${Math.round(value)}%`, "Tariff Inflation"]
-                if (name === "quantitativeTightening") return [`${Math.round(value)}%`, "QT / Quantitative Tightening"]
+                if (name === "probability") return [`${Math.round(value)}%`, marketData.probabilities.main.label]
+                if (name === "tariffInflation") return [`${Math.round(value)}%`, marketData.probabilities.secondary.label]
+                if (name === "quantitativeTightening") return [`${Math.round(value)}%`, marketData.probabilities.tertiary.label]
                 return [value, name]
               }}
               labelFormatter={(timestamp) => {

@@ -78,12 +78,14 @@ export function BrierScore() {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "hsl(var(--card))",
-                border: "1px solid hsl(var(--border))",
+                backgroundColor: "white",
+                border: "2px solid #e5e7eb",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                color: "hsl(var(--foreground))"
+                boxShadow: "0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05)",
+                color: "#111827",
+                zIndex: 1000
               }}
+              wrapperStyle={{ zIndex: 1000 }}
               formatter={(value: any) => [(value as number).toFixed(3), "Brier Score"]}
               labelFormatter={(timestamp) => {
                 const date = new Date(timestamp)

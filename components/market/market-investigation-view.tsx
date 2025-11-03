@@ -33,9 +33,9 @@ export function MarketInvestigationView() {
 
   // Use static dimensions during SSR, responsive after hydration
   // Account for padding (32px on each side = 64px total)
-  const availableWidth = isClient ? viewportWidth - 64 : 1336
-  const widgetWidth = isClient ? Math.floor((availableWidth - 16) * 0.5) : 640 // Match other tabs
-  const rightColumnX = isClient ? widgetWidth + 16 : 660 // Match other tabs
+  const availableWidth = isClient ? viewportWidth - 64 : 1408 // MacBook Air optimized to match other tabs
+  const widgetWidth = isClient ? Math.floor((availableWidth - 16) * 0.5) : 696 // Half of 1408px minus gap
+  const rightColumnX = isClient ? widgetWidth + 16 : 712 // widget width + gap
 
   return (
     <MarketProvider>
@@ -47,8 +47,8 @@ export function MarketInvestigationView() {
       <div className="relative min-h-[800px]">
       {/* Market Overview - Top Left */}
       <DraggableWidget
-        defaultWidth={640}
-        defaultHeight={380}
+        defaultWidth={696}
+        defaultHeight={360}
         initialX={0}
         initialY={0}
         widgetId="market-overview"
@@ -60,9 +60,9 @@ export function MarketInvestigationView() {
 
       {/* Order Book - Top Right */}
       <DraggableWidget
-        defaultWidth={640}
-        defaultHeight={380}
-        initialX={660}
+        defaultWidth={696}
+        defaultHeight={360}
+        initialX={712}
         initialY={0}
         widgetId="orderbook"
         viewId="market-investigation"
@@ -74,10 +74,10 @@ export function MarketInvestigationView() {
 
       {/* Recent Trades - Bottom Left */}
       <DraggableWidget
-        defaultWidth={640}
-        defaultHeight={380}
+        defaultWidth={696}
+        defaultHeight={360}
         initialX={0}
-        initialY={400}
+        initialY={380}
         widgetId="recent-trades"
         viewId="market-investigation"
         responsiveWidth={isClient ? widgetWidth : undefined}
@@ -87,10 +87,10 @@ export function MarketInvestigationView() {
 
       {/* Market Details - Bottom Right */}
       <DraggableWidget
-        defaultWidth={640}
-        defaultHeight={380}
-        initialX={660}
-        initialY={400}
+        defaultWidth={696}
+        defaultHeight={360}
+        initialX={712}
+        initialY={380}
         widgetId="market-details"
         viewId="market-investigation"
         responsiveWidth={isClient ? widgetWidth : undefined}

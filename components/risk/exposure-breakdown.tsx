@@ -68,6 +68,15 @@ export function ExposureBreakdown() {
               })}
             </Pie>
             <Tooltip
+              contentStyle={{
+                backgroundColor: "white",
+                border: "2px solid #e5e7eb",
+                borderRadius: "8px",
+                boxShadow: "0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05)",
+                color: "#111827",
+                zIndex: 1000
+              }}
+              wrapperStyle={{ zIndex: 1000 }}
               content={({ active, payload }) => {
                 if (!active || !payload || payload.length === 0) return null
                 const data = payload[0]?.payload
@@ -76,22 +85,22 @@ export function ExposureBreakdown() {
                 const color = CHART_COLORS[riskMetrics.findIndex(m => m.category === data.category) % CHART_COLORS.length]
                 
                 return (
-                  <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+                  <div className="bg-white border-2 border-gray-200 rounded-lg p-3 shadow-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <div 
                         className="w-3 h-3 rounded-full" 
                         style={{ backgroundColor: color }}
                       />
-                      <span className="font-semibold text-foreground">{data.category}</span>
+                      <span className="font-semibold text-gray-900">{data.category}</span>
                     </div>
-                    <div className="space-y-1 text-sm">
+                    <div className="space-y-1 text-sm text-gray-700">
                       <div className="flex justify-between gap-4">
-                        <span className="text-muted-foreground">Exposure:</span>
-                        <span className="font-bold text-foreground">{formatCurrency(data.exposure)}</span>
+                        <span>Exposure:</span>
+                        <span className="font-bold text-gray-900">{formatCurrency(data.exposure)}</span>
                       </div>
                       <div className="flex justify-between gap-4">
-                        <span className="text-muted-foreground">Percentage:</span>
-                        <span className="font-bold text-foreground">{data.percentage}%</span>
+                        <span>Percentage:</span>
+                        <span className="font-bold text-gray-900">{data.percentage}%</span>
                       </div>
                     </div>
                   </div>

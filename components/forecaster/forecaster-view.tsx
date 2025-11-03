@@ -4,7 +4,8 @@ import { useState, useEffect } from "react"
 import { InsiderView } from "./insider-view"
 import { CategoryPerformance } from "./category-performance"
 import { BrierScore } from "./brier-score"
-import { CalibrationCurve } from "./calibration-curve"
+import { CalibrationCurveYes } from "./calibration-curve-yes"
+import { CalibrationCurveNo } from "./calibration-curve-no"
 import { DraggableWidget } from "../draggable-widget"
 
 export function ForecasterView() {
@@ -31,22 +32,25 @@ export function ForecasterView() {
 
   // Use static dimensions during SSR, responsive after hydration
   // Account for padding (32px on each side = 64px total)
-  const availableWidth = isClient ? viewportWidth - 64 : 1440 // Increased to fill remaining gap
+  const availableWidth = isClient ? viewportWidth - 64 : 1408 // MacBook Air optimized
   
-  const insiderWidth = isClient ? Math.floor(availableWidth * 0.32) : 461 // 32% of 1440px
-  const categoryWidth = isClient ? Math.floor(availableWidth * 0.66) : 995 // Further increased to eliminate gap completely
-  const categoryX = isClient ? insiderWidth + 16 : 477 // insider width + gap
+  // Top row: Insider view (30%) and Category Performance (68%)
+  const insiderWidth = isClient ? Math.floor(availableWidth * 0.30) : 422 // 30% of 1408px
+  const categoryWidth = isClient ? Math.floor(availableWidth * 0.68) : 958 // 68% of 1408px
+  const categoryX = isClient ? insiderWidth + 16 : 438 // insider width + gap
   
-  const bottomWidth = isClient ? Math.floor((availableWidth - 16) * 0.5) : 712 // Half of available minus gap
-  const bottomRightX = isClient ? bottomWidth + 16 : 728 // bottom width + gap
+  // Bottom row: 3 widgets - Brier Score, YES Calibration, NO Calibration
+  const bottomWidth = isClient ? Math.floor((availableWidth - 32) / 3) : 459 // Three equal widgets with gaps
+  const bottomMiddleX = isClient ? bottomWidth + 16 : 475 // first width + gap
+  const bottomRightX = isClient ? (bottomWidth * 2) + 32 : 950 // two widths + two gaps
 
   return (
     <div className="relative min-h-[800px]">
       <DraggableWidget
         widgetId="insider-view"
         viewId="forecaster"
-        defaultWidth={461}
-        defaultHeight={320}
+        defaultWidth={422}
+        defaultHeight={280}
         initialX={0}
         initialY={0}
         responsiveWidth={isClient ? insiderWidth : undefined}
@@ -57,9 +61,9 @@ export function ForecasterView() {
       <DraggableWidget
         widgetId="category-performance"
         viewId="forecaster"
-        defaultWidth={995}
-        defaultHeight={320}
-        initialX={477}
+        defaultWidth={958}
+        defaultHeight={280}
+        initialX={438}
         initialY={0}
         responsiveWidth={isClient ? categoryWidth : undefined}
         responsiveX={isClient ? categoryX : undefined}
@@ -70,26 +74,39 @@ export function ForecasterView() {
       <DraggableWidget
         widgetId="brier-score"
         viewId="forecaster"
-        defaultWidth={712}
-        defaultHeight={380}
+        defaultWidth={459}
+        defaultHeight={320}
         initialX={0}
-        initialY={340}
+        initialY={300}
         responsiveWidth={isClient ? bottomWidth : undefined}
       >
         <BrierScore />
       </DraggableWidget>
 
       <DraggableWidget
-        widgetId="calibration-curve"
+        widgetId="calibration-curve-yes"
         viewId="forecaster"
-        defaultWidth={712}
-        defaultHeight={380}
-        initialX={728}
-        initialY={340}
+        defaultWidth={459}
+        defaultHeight={320}
+        initialX={475}
+        initialY={300}
+        responsiveWidth={isClient ? bottomWidth : undefined}
+        responsiveX={isClient ? bottomMiddleX : undefined}
+      >
+        <CalibrationCurveYes />
+      </DraggableWidget>
+
+      <DraggableWidget
+        widgetId="calibration-curve-no"
+        viewId="forecaster"
+        defaultWidth={459}
+        defaultHeight={320}
+        initialX={950}
+        initialY={300}
         responsiveWidth={isClient ? bottomWidth : undefined}
         responsiveX={isClient ? bottomRightX : undefined}
       >
-        <CalibrationCurve />
+        <CalibrationCurveNo />
       </DraggableWidget>
     </div>
   )
