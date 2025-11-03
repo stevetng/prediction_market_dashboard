@@ -10,6 +10,21 @@ export function RiskHeatmap() {
   const [riskMetrics, setRiskMetrics] = useState<any[]>([])
   const [maxExposure, setMaxExposure] = useState(0)
 
+  // Function to determine if text should be light or dark based on background color
+  const getTextColor = (backgroundColor: string) => {
+    // Convert hex to RGB
+    const hex = backgroundColor.replace('#', '')
+    const r = parseInt(hex.substr(0, 2), 16)
+    const g = parseInt(hex.substr(2, 2), 16)
+    const b = parseInt(hex.substr(4, 2), 16)
+    
+    // Calculate luminance using relative luminance formula
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+    
+    // Return white text for dark backgrounds, black text for light backgrounds
+    return luminance > 0.5 ? '#000000' : '#ffffff'
+  }
+
   useEffect(() => {
     setIsClient(true)
     const metrics = generateRiskMetrics()
@@ -59,7 +74,12 @@ export function RiskHeatmap() {
                   }}
                 />
                 <div className="absolute inset-0 flex items-center px-3">
-                  <span className="text-xs font-medium text-black">
+                  <span 
+                    className="text-xs font-medium"
+                    style={{
+                      color: getTextColor(metric.color)
+                    }}
+                  >
                     {metric.percentage}% exposure
                   </span>
                 </div>

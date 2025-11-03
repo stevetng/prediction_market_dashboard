@@ -33,15 +33,15 @@ export function InstitutionalView() {
   // Account for padding (32px on each side = 64px total)
   const availableWidth = isClient ? viewportWidth - 64 : 1408 // Increased to better match actual MacBook Air full-screen
   
-  // Top row: 60% chart, remaining space for positions (minus gap)
-  const chartWidth = isClient ? Math.max(600, Math.floor(availableWidth * 0.6)) : 845 // 60% of 1408px
-  const metricsWidth = isClient ? Math.max(300, availableWidth - chartWidth - 16) : 547 // Fill remaining
-  const metricsX = isClient ? chartWidth + 16 : 861 // chart width + gap
+  // Top row: 50% chart (reduced from 60%), remaining space for positions (minus gap)
+  const chartWidth = isClient ? Math.max(500, Math.floor(availableWidth * 0.5)) : 696 // 50% of 1408px
+  const metricsWidth = isClient ? Math.max(300, availableWidth - chartWidth - 16) : 696 // Fill remaining
+  const metricsX = isClient ? chartWidth + 16 : 712 // chart width + gap
   
   // Bottom row: Use same proportions as top row for consistency
-  const bottomLeftWidth = isClient ? chartWidth : 845 // Match chart width
-  const bottomRightWidth = isClient ? metricsWidth : 547 // Match metrics width  
-  const bottomRightX = isClient ? chartWidth + 16 : 861 // Match metrics X position
+  const bottomLeftWidth = isClient ? chartWidth : 696 // Match chart width
+  const bottomRightWidth = isClient ? metricsWidth : 696 // Match metrics width  
+  const bottomRightX = isClient ? chartWidth + 16 : 712 // Match metrics X position
 
   return (
     <div className="relative min-h-[800px]">
@@ -49,8 +49,8 @@ export function InstitutionalView() {
       <DraggableWidget
         widgetId="portfolio-chart"
         viewId="institutional"
-        defaultWidth={845}
-        defaultHeight={400}
+        defaultWidth={696}
+        defaultHeight={320}
         initialX={0}
         initialY={0}
         responsiveWidth={isClient ? chartWidth : undefined}
@@ -63,9 +63,9 @@ export function InstitutionalView() {
       <DraggableWidget
         widgetId="positions-table"
         viewId="institutional"
-        defaultWidth={547}
-        defaultHeight={400}
-        initialX={861}
+        defaultWidth={696}
+        defaultHeight={480}
+        initialX={712}
         initialY={0}
         responsiveWidth={isClient ? metricsWidth : undefined}
         responsiveX={isClient ? metricsX : undefined}
@@ -77,10 +77,10 @@ export function InstitutionalView() {
       <DraggableWidget
         widgetId="event-timeline"
         viewId="institutional"
-        defaultWidth={845}
-        defaultHeight={380}
+        defaultWidth={696}
+        defaultHeight={300}
         initialX={0}
-        initialY={420}
+        initialY={340}
         responsiveWidth={isClient ? bottomLeftWidth : undefined}
       >
         <EventTimeline />
@@ -90,10 +90,10 @@ export function InstitutionalView() {
       <DraggableWidget
         widgetId="trading-activity-monitor"
         viewId="institutional"
-        defaultWidth={547}
-        defaultHeight={380}
-        initialX={861}
-        initialY={420}
+        defaultWidth={696}
+        defaultHeight={200}
+        initialX={712}
+        initialY={500}
         responsiveWidth={isClient ? bottomRightWidth : undefined}
         responsiveX={isClient ? bottomRightX : undefined}
       >

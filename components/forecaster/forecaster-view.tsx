@@ -35,14 +35,14 @@ export function ForecasterView() {
   const availableWidth = isClient ? viewportWidth - 64 : 1408 // MacBook Air optimized
   
   // Top row: Insider view (30%) and Category Performance (68%)
-  const insiderWidth = isClient ? Math.floor(availableWidth * 0.30) : 422 // 30% of 1408px
-  const categoryWidth = isClient ? Math.floor(availableWidth * 0.68) : 958 // 68% of 1408px
-  const categoryX = isClient ? insiderWidth + 16 : 438 // insider width + gap
+  const insiderWidth = isClient ? Math.floor(availableWidth * 0.30) : 422 // 30% of 1408px = 422
+  const categoryWidth = isClient ? Math.floor(availableWidth * 0.68) : 970 // 68% of 1408px = 958, but adjust to fill remaining space
+  const categoryX = isClient ? insiderWidth + 16 : 438 // insider width + gap (422+16 = 438)
   
   // Bottom row: 3 widgets - Brier Score, YES Calibration, NO Calibration
-  const bottomWidth = isClient ? Math.floor((availableWidth - 32) / 3) : 459 // Three equal widgets with gaps
-  const bottomMiddleX = isClient ? bottomWidth + 16 : 475 // first width + gap
-  const bottomRightX = isClient ? (bottomWidth * 2) + 32 : 950 // two widths + two gaps
+  const bottomWidth = isClient ? Math.floor((availableWidth - 32) / 3) : 459 // Three equal widgets with gaps (1408-32)/3 = 459
+  const bottomMiddleX = isClient ? bottomWidth + 16 : 475 // first width + gap (459+16 = 475)
+  const bottomRightX = isClient ? (bottomWidth * 2) + 32 : 950 // two widths + two gaps (459*2+32 = 950)
 
   return (
     <div className="relative min-h-[800px]">
@@ -61,7 +61,7 @@ export function ForecasterView() {
       <DraggableWidget
         widgetId="category-performance"
         viewId="forecaster"
-        defaultWidth={958}
+        defaultWidth={970}
         defaultHeight={280}
         initialX={438}
         initialY={0}

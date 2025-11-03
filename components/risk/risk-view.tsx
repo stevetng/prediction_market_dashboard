@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { RiskHeatmap } from "./risk-heatmap"
+import { RiskAlertsMonitor } from "./risk-alerts-monitor"
 import { RiskGauge } from "./risk-gauge"
 import { RiskTreemap } from "./risk-treemap"
 import { ExposureBreakdown } from "./exposure-breakdown"
@@ -42,11 +42,11 @@ export function RiskView() {
         defaultHeight={380}
         initialX={0}
         initialY={0}
-        widgetId="risk-heatmap"
+        widgetId="risk-alerts-monitor"
         viewId="risk"
         responsiveWidth={isClient ? widgetWidth : undefined}
       >
-        <RiskHeatmap />
+        <RiskAlertsMonitor />
       </DraggableWidget>
 
       <DraggableWidget
