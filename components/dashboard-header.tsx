@@ -54,6 +54,17 @@ export function DashboardHeader() {
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-semibold">Prediction Market Analytics</h1>
             <span className="text-sm text-muted-foreground">Advanced Trading Analysis</span>
+            <span className="text-xs text-muted-foreground">
+              designed + coded by{" "}
+              <a 
+                href="https://x.com/WoahIsThatSteve" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="underline hover:text-foreground transition-colors"
+              >
+                Steve
+              </a>
+            </span>
           </div>
           <div className="w-20 h-10"></div> {/* Placeholder for button */}
         </div>
@@ -67,6 +78,17 @@ export function DashboardHeader() {
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-semibold">Prediction Market Analytics</h1>
           <span className="text-sm text-muted-foreground">Advanced Trading Analysis</span>
+          <span className="text-xs text-muted-foreground">
+            designed + coded by{" "}
+            <a 
+              href="https://x.com/WoahIsThatSteve" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground transition-colors"
+            >
+              Steve
+            </a>
+          </span>
         </div>
         
         <button
